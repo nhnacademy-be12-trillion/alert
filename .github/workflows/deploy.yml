@@ -8,7 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   REGISTRY_OWNER: nhnacademy-be12-trillion
-  IMAGE_NAME: alert
+  IMAGE_NAME: alert-service
   JAVA_VERSION: 21
   DEPLOY_DIR: ~/msa-project
 
@@ -70,7 +70,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          SERVICE_NAME_1="trillion-alert-server"
+          SERVICE_NAME_1="trillion-alert-service"
 
           mkdir -p ${{ env.DEPLOY_DIR }}
           cd ${{ env.DEPLOY_DIR }}

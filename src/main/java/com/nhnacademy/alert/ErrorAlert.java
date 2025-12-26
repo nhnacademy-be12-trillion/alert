@@ -1,6 +1,6 @@
 package com.nhnacademy.alert;
 
-public record ErroeAlert(
+public record ErrorAlert(
         String ts,
         String service,
         String level,
