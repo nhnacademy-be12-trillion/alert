@@ -1,0 +1,18 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+
+### Dooray Incoming Webhook - ERROR alert (minimal + safe)
+POST http://localhost:10416/alerts
+Content-Type: application/json
+
+{
+  "service": "gateway",
+  "level": "ERROR",
+  "message": "JWT verification failed",
+  "traceId": "d1a9e2f77b1c",
+  "path": "/api/auth/refresh",
+  "status": "401",
+  "timestamp": "{{$isoTimestamp}}"
+}
