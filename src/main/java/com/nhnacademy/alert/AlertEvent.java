@@ -7,5 +7,7 @@ public record AlertEvent(
         String traceId,
         String path,
         String status,
-        String timestamp
+        String timestamp,
+        String logger_name,
+        String stack_trace_short
 ) {}

@@ -26,14 +26,13 @@ public class AlertWorker {
             try {
                 AlertEvent e = queue.take();
 
-            String signature = String.join("|",
-                    e.service(),
-                    e.level(),
-                    e.traceId(),
-                    e.message()
-            );
+                String signature = String.join("|",
+                        e.service(),
+                        e.level(),
+                        e.message()
+                );
 
-            if (!deduplicator.shouldSend(signature)) {
+                if (!deduplicator.shouldSend(signature)) {
                 continue;
             }
 
@@ -42,17 +41,21 @@ public class AlertWorker {
                     서비스: %s
                     레벨: %s
                     트레이스 ID: %s
+                    로거네임: %s
                     경로: %s
                     메시지: %s
                     시간: %s
+                    stack_trace:%s
                     """
                     .formatted(
                             e.service(),
                             e.level(),
                             e.traceId(),
+                            e.logger_name(),
                             e.path(),
                             e.message(),
-                            e.timestamp()
+                            e.timestamp(),
+                            e.stack_trace_short()
                     );
                 sender.send(text);
             } catch (InterruptedException ex) {
