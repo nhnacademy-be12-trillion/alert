@@ -32,8 +32,9 @@ public class AlertWorker {
                         e.level(),
                         e.logger_name()
                 );
-                log.info("****** signature + shouldSend bool type: {} + {}", signature, deduplicator.shouldSend(signature));
-                if (!deduplicator.shouldSend(signature)) {
+                boolean shouldSend = deduplicator.shouldSend(signature);
+                log.info("****** signature + shouldSend bool type: {} + {}", signature, shouldSend);
+                if (!shouldSend) {
                 continue;
             }
 
@@ -68,10 +69,8 @@ public class AlertWorker {
     }
 
     private String normalizeService(String service) {
-        if (service == null) return "unknown";
-
-        return service
-                .replaceAll("(-peer\\d+)$", "");
+        if (service == null || service.isBlank()) return "unknown";
+        return service.replaceAll("(-peer-?\\d+)$", "");
     }
 
 }
