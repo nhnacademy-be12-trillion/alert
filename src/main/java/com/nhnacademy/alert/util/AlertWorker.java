@@ -30,9 +30,9 @@ public class AlertWorker {
                 String signature = String.join("|",
                         service,
                         e.level(),
-                        e.message()
+                        e.logger_name()
                 );
-
+                log.info("****** signature + shouldSend bool type: {} + {}", signature, deduplicator.shouldSend(signature));
                 if (!deduplicator.shouldSend(signature)) {
                 continue;
             }
@@ -62,7 +62,7 @@ public class AlertWorker {
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             } catch (Exception ex) {
-                log.error("Dooray webhook failed", ex);
+                log.warn("Dooray webhook failed", ex);
             }
         }
     }
@@ -70,11 +70,8 @@ public class AlertWorker {
     private String normalizeService(String service) {
         if (service == null) return "unknown";
 
-        // peer1, peer2, peer-1, peer-2 등 제거
         return service
-                .replaceAll("(-peer\\d+)$", "")
-                .replaceAll("(-peer-\\d+)$", "")
-                .replaceAll("(peer\\d+)$", "");
+                .replaceAll("(-peer\\d+)$", "");
     }
 
 }
