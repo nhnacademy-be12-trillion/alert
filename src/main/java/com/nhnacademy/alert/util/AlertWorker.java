@@ -25,9 +25,10 @@ public class AlertWorker {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 AlertEvent e = queue.take();
+                String service = normalizeService(e.service());
 
                 String signature = String.join("|",
-                        e.service(),
+                        service,
                         e.level(),
                         e.message()
                 );
@@ -48,7 +49,7 @@ public class AlertWorker {
                     stack_trace:%s
                     """
                     .formatted(
-                            e.service(),
+                            service,
                             e.level(),
                             e.traceId(),
                             e.logger_name(),
@@ -65,5 +66,16 @@ public class AlertWorker {
             }
         }
     }
+
+    private String normalizeService(String service) {
+        if (service == null) return "unknown";
+
+        // peer1, peer2, peer-1, peer-2 등 제거
+        return service
+                .replaceAll("(-peer\\d+)$", "")
+                .replaceAll("(-peer-\\d+)$", "")
+                .replaceAll("(peer\\d+)$", "");
+    }
+
 }
 
