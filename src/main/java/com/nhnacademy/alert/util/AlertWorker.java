@@ -25,6 +25,7 @@ public class AlertWorker {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 AlertEvent e = queue.take();
+                log.info("****** service signature part: {}", e.service());
                 String service = normalizeService(e.service());
 
                 String signature = String.join("|",

@@ -17,6 +17,7 @@ public class AlertController {
 
     @PostMapping
     public ResponseEntity<Void> receive(@RequestBody AlertEvent event) {
+        //큐에 이벤트 주입
         alertQueue.enqueue(event);
         return ResponseEntity.ok().build(); // Fluentd 즉시 OK
     }
