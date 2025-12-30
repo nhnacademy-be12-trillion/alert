@@ -45,17 +45,15 @@ public class AlertWorker {
                     레벨: %s
                     트레이스 ID: %s
                     로거네임: %s
-                    경로: %s
                     메시지: %s
                     시간: %s
-                    stack_trace:%s
+                    stack_trace(일부):%s
                     """
                     .formatted(
                             service,
                             e.level(),
                             e.traceId(),
                             e.logger_name(),
-                            e.path(),
                             e.message(),
                             e.timestamp(),
                             e.stack_trace_short()
