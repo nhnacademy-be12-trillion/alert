@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AlertMessageFactory {
 
-    public String initial(AlertEvent e, String signature, String groupId, boolean analyze) {
+    public String initial(AlertEvent e, String signature, boolean analyze) {
         String tail = analyze
                 ? "\n🤖 AI 분석 진행 중… 완료되면 [오류 분석] 채널로 후속 안내합니다."
                 : "\nℹ️ (AI 분석 생략)";
@@ -17,7 +17,6 @@ public class AlertMessageFactory {
         - service: %s
         - level: %s
         - traceId: %s
-        - groupId: %s
         - signature: %s
         - logger: %s
         - message: %s
@@ -27,7 +26,6 @@ public class AlertMessageFactory {
                 n(e.service()),
                 n(e.level()),
                 n(e.traceId()),
-                groupId,
                 signature,
                 n(e.logger_name()),
                 trim(e.message(), 500),
