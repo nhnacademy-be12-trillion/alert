@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
+
 
 @Component
 @Slf4j
@@ -37,7 +39,11 @@ public class DoorayWebhookSender {
                 .bodyValue(payload)
                 .retrieve()
                 .toBodilessEntity()
+                .timeout(Duration.ofSeconds(5))
                 .doOnError(e -> log.warn("Dooray 전송 실패: {}", e.toString()))
-                .subscribe();
+                .subscribe(
+                        success -> {},
+                        error -> log.error("Dooray webhook 전송 중 오류 발생", error)
+                );
     }
 }

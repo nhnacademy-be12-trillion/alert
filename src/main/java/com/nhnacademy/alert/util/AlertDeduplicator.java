@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 
 @Component
@@ -17,7 +16,7 @@ public class AlertDeduplicator {
     public AlertDeduplicator(AlertDedupProperties props) {
         this.cache = Caffeine.newBuilder()
                 .expireAfterWrite(props.getCooldown())
-                .maximumSize(1000)
+                .maximumSize(props.getMaxSize())
                 .build();
     }
 
