@@ -1,9 +1,7 @@
 package com.nhnacademy.alert.gemini;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -52,9 +50,9 @@ public class GeminiClient {
                     .map(response -> {
                         try {
                             List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
-                            Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+                            Map<String, Object> content = (Map<String, Object>) candidates.getFirst().get("content");
                             List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
-                            return (String) parts.get(0).get("text");
+                            return (String) parts.getFirst().get("text");
                         } catch (Exception e) {
                             log.error("응답 파싱 실패: {}", response);
                             return "응답 구조 분석 실패";

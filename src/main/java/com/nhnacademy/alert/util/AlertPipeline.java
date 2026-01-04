@@ -26,15 +26,10 @@ public class AlertPipeline {
 
         if (!deduplicator.shouldSend(signature)) return;
 
-        // ✅ 이 이벤트 그룹 id 생성/조회
-        String groupId = threadRegistry.getOrCreate(signature);
-
         boolean analyze = analysisService.shouldAnalyze(e);
 
-        // 1) 즉시 알림 (groupId 포함)
-        dooraySender.sendAlert(messageFactory.initial(e, signature, groupId, analyze));
+        dooraySender.sendAlert(messageFactory.initial(e, signature, analyze));
 
-        // 2) 분석은 조건부 + 비동기 (groupId도 같이 넘기기)
         if (analyze) {
             analysisExecutor.submit(signature, e,
                     () -> analysisService.analyzeAndSend(e, signature));
