@@ -1,7 +1,6 @@
 package com.nhnacademy.alert.util;
 
 import com.nhnacademy.alert.AlertEvent;
-import com.nhnacademy.alert.gemini.AnalysisDropNotifier;
 import com.nhnacademy.alert.util.message.AlertMessageFactory;
 import com.nhnacademy.alert.util.message.DoorayWebhookSender;
 import lombok.RequiredArgsConstructor;

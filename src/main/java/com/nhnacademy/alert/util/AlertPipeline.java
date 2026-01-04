@@ -19,8 +19,6 @@ public class AlertPipeline {
     private final AnalysisExecutor analysisExecutor;
     private final AlertAnalysisService analysisService;
 
-    private final ThreadRegistry threadRegistry; // ✅ 추가
-
     public void handle(AlertEvent e) {
         String signature = signatureFactory.build(e);
 

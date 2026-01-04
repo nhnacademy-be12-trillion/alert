@@ -12,28 +12,22 @@ import java.time.Instant;
 @EnableConfigurationProperties(AlertDedupProperties.class)
 public class AlertDeduplicator {
 
-    private final Duration cooldown;
     private final Cache<String, Instant> cache;
 
     public AlertDeduplicator(AlertDedupProperties props) {
-        this.cooldown = props.getCooldown();
         this.cache = Caffeine.newBuilder()
-                .expireAfterWrite(cooldown)
-                .maximumSize(props.getMaxSize())
+                .expireAfterWrite(props.getCooldown())
+                .maximumSize(1000)
                 .build();
     }
 
     public boolean shouldSend(String key) {
-        Instant now = Instant.now();
-        final boolean[] send = {false};
+        Instant lastSent = cache.getIfPresent(key);
 
-        cache.asMap().compute(key, (k, last) -> {
-            if (last == null || last.plus(cooldown).isBefore(now)) {
-                send[0] = true;
-                return now;
-            }
-            return last;
-        });
-        return send[0];
+        if (lastSent == null) {
+            cache.put(key, Instant.now());
+            return true;
+        }
+        return false;
     }
 }
