@@ -10,7 +10,7 @@ public class AlertMessageFactory {
     public String initial(AlertEvent e, String signature, boolean analyze) {
         String tail = analyze
                 ? "\n🤖 AI 분석 진행 중… 완료되면 [오류 분석] 채널로 후속 안내합니다."
-                : "\nℹ️ (AI 분석 생략)";
+                : "\nℹ️ (AI 분석 생략 - ERROR 레벨, stack_trace 존재 요청만)";
 
         return """
         🚨 오류 발생
