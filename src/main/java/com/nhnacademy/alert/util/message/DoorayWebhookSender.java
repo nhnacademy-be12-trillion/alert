@@ -1,46 +1,43 @@
 package com.nhnacademy.alert.util.message;
 
-
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 
 @Component
 @Slf4j
+@EnableConfigurationProperties(DoorayProperties.class)
 public class DoorayWebhookSender {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final WebClient webClient;
 
-    @Value("${dooray.webhook.url}")
-    private String doorayUrl;
+    private final DoorayProperties prop;
 
-    @Value("${dooray.webhook.analysis.url}")
-    private String analysisDoorayUrl;
-
-    public void sendAlert(String messageText) {
-        post(doorayUrl, messageText);
+    public DoorayWebhookSender(@Qualifier("doorayWebClient") WebClient webClient, DoorayProperties prop) {
+        this.webClient = webClient;
+        this.prop = prop;
     }
 
-    public void sendAnalysis(String messageText) {
-        post(analysisDoorayUrl, messageText);
+    public void sendAnalysis(String text) {
+        post(prop.analysis_url(), text);
     }
 
-    private void post(String url, String messageText) {
-        DoorayPayload payload = new DoorayPayload("⛔️Trillion bot", messageText);
+    public void sendAlert(String text) {
+        post(prop.url(), text);
+    }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    private void post(String url, String text) {
+        DoorayPayload payload = new DoorayPayload(prop.botName(), text);
 
-        try {
-            HttpEntity<DoorayPayload> entity = new HttpEntity<>(payload, headers);
-            restTemplate.postForObject(url, entity, String.class);
-        } catch (Exception e) {
-            log.warn("Dooray webhook 전송 실패(url={}): {}", url, e.getMessage());
-        }
+        webClient.post()
+                .uri(url)
+                .bodyValue(payload)
+                .retrieve()
+                .toBodilessEntity()
+                .doOnError(e -> log.warn("Dooray 전송 실패: {}", e.toString()))
+                .subscribe();
     }
 }
