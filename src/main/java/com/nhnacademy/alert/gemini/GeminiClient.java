@@ -26,7 +26,7 @@ public class GeminiClient {
     }
 
     public String getGeminiPrompt(String err) {
-        String analysisErrorText = err.substring(0, 797) + "...";
+        String analysisErrorText = err.length() > 797 ? err.substring(0, 797) + "..." : err;
         String prompt = setRequestGeminiPrompt(analysisErrorText);
         Map<String, Object> requestBody = Map.of(
                 "contents", List.of(
