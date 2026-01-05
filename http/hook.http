@@ -8,11 +8,12 @@ POST http://localhost:10416/alerts
 Content-Type: application/json
 
 {
-  "service": "gateway",
+  "service": "alert-tt",
   "level": "ERROR",
-  "message": "JWT verification failed",
-  "traceId": "d1a9e2f77b1c",
-  "path": "/api/auth/refresh",
-  "status": "401",
-  "timestamp": "{{$isoTimestamp}}"
+  "message": "alert-tt",
+  "traceId": "alert-tt",
+  "spanId": "",
+  "@timestamp": "{{$isoTimestamp}}",
+  "logger_name": "/app/logs/alert-test",
+  "stack_trace_short": "java.lang.IllegalArgumentException: 유저 인증이 필요합니다 (Header or Cookie missing)at com.nhnacademy.cart.common.resolver.CartHolderResolver.resolveArgument(CartHolderResolver.java:53) at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227) at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181) at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991) at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896) at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:97"
 }
